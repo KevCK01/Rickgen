@@ -1,1 +1,249 @@
-<!DOCTYPE html><html><head><title>Rick Rubin Haiku Generator</title></head><body><h1>Rick Rubin Haiku Generator</h1><button onclick="generateHaiku()">Generate Haiku</button><div id="answer"></div><script>function generateHaiku(){document.getElementById("answer").innerHTML="Test Haiku Working!"}</script></body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rick Rubin Haiku Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            min-height: 100vh;
+            margin: 0;
+            background-image: url('rick.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-color: #1a1a1a;
+            color: #ffffff;
+            padding-top: 15vh;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.3);
+            z-index: -1;
+        }
+
+        h1 {
+            color: #ffffff;
+            margin-bottom: 3rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            font-size: 2.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .result-section {
+            margin-bottom: 3rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .button-container {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin: 1rem 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        button {
+            padding: 0.8rem 1.5rem;
+            font-size: 1.2rem;
+            background-color: #4a4a4a;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            flex: 1;
+            max-width: 200px;
+        }
+
+        button:hover {
+            background-color: #666666;
+        }
+
+        .result-box {
+            margin: 0 auto;
+            padding: 2.5rem;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+            border-radius: 10px;
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            width: 90%;
+            max-width: 700px;
+            text-align: center;
+            line-height: 1.8;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(5px);
+        }
+
+        .result-box.show {
+            opacity: 1;
+        }
+
+        .haiku-line {
+            margin: 0.5rem 0;
+            font-style: italic;
+        }
+
+        .shake {
+            animation: shake 0.5s;
+        }
+
+        @keyframes shake {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(5px, 5px) rotate(5deg); }
+            50% { transform: translate(0, 0) rotate(0deg); }
+            75% { transform: translate(-5px, 5px) rotate(-5deg); }
+            100% { transform: translate(0, 0) rotate(0deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="result-section">
+        <div class="result-box" id="answer"></div>
+    </div>
+
+    <div class="button-container">
+        <button onclick="generateHaiku()">Generate Haiku</button>
+    </div>
+
+    <h1>Rick Rubin Haiku Generator</h1>
+
+    <script>
+        // First lines (5 syllables)
+        const firstLines = [
+            "Strip away the noise",
+            "Empty studio,",
+            "Beard holds ancient words,",
+            "Morning meditation:",
+            "Barefoot on the floor,",
+            "The artist argues,",
+            "Analog warmth flows",
+            "Cross-legged, I listen",
+            "Delete the extra,",
+            "Sunset through the glass,",
+            "Trust the first instinct,",
+            "The drummer rushes,",
+            "Incense burns slowly,",
+            "Remove another track,",
+            "The singer trembles,",
+            "Ancient wisdom speaks",
+            "Closed eyes, open heart,",
+            "Nature's rhythm calls",
+            "The take sounds perfect,",
+            "Meditation bell"
+        ];
+
+        // Second lines (7 syllables)
+        const secondLines = [
+            "What remains when silence speaks",
+            "Waiting for the perfect take",
+            "Whispered secrets of the mix",
+            "The fader moves without thought",
+            "Feeling vibrations of sound",
+            "I close my eyes and just breathe",
+            "Through tubes that remember jazz",
+            "To spaces between the beats",
+            "What serves the song stays behind",
+            "Golden hour meets golden ear",
+            "Before the mind interferes",
+            "I shake my head just once",
+            "Smoke rises like reverb trails",
+            "Sometimes less is infinite",
+            "I nod: 'Your fear is perfect'",
+            "Through modern speakers and mics",
+            "The mix reveals its secrets",
+            "From outside the studio",
+            "But perfect isn't alive",
+            "Rings once in the control room"
+        ];
+
+        // Third lines (5 syllables)
+        const thirdLines = [
+            "Listen to the space",
+            "Let the music breathe",
+            "Trust your intuition",
+            "Feel the rhythm flow",
+            "Find the perfect take",
+            "Let the silence speak",
+            "Hear the truth within",
+            "Trust the process now",
+            "Let the song guide you",
+            "Feel the moment's grace",
+            "Trust the first instinct",
+            "Let the music flow",
+            "Hear the subtle truth",
+            "Feel the energy",
+            "Trust the artist's voice",
+            "Let the moment speak",
+            "Hear the deeper truth",
+            "Feel the music's soul",
+            "Trust the natural flow",
+            "Let the silence guide"
+        ];
+
+        // Track used lines for each category
+        let usedFirstLines = [];
+        let usedSecondLines = [];
+        let usedThirdLines = [];
+
+        function getNextLine(array, usedLines) {
+            // If all lines have been used, reset the used lines array
+            if (usedLines.length >= array.length) {
+                usedLines.length = 0;
+            }
+
+            // Get available lines (those not in usedLines)
+            const availableLines = array.filter(line => !usedLines.includes(line));
+            
+            // Get random line from available lines
+            const randomIndex = Math.floor(Math.random() * availableLines.length);
+            const selectedLine = availableLines[randomIndex];
+            
+            // Add to used lines
+            usedLines.push(selectedLine);
+            
+            return selectedLine;
+        }
+
+        function generateHaiku() {
+            const firstLine = getNextLine(firstLines, usedFirstLines);
+            const secondLine = getNextLine(secondLines, usedSecondLines);
+            const thirdLine = getNextLine(thirdLines, usedThirdLines);
+
+            const resultBox = document.getElementById('answer');
+            resultBox.innerHTML = `
+                <div class="haiku-line">${firstLine}</div>
+                <div class="haiku-line">${secondLine}</div>
+                <div class="haiku-line">${thirdLine}</div>
+            `;
+            resultBox.classList.add('show');
+            resultBox.classList.add('shake');
+            setTimeout(() => {
+                resultBox.classList.remove('shake');
+            }, 500);
+        }
+    </script>
+</body>
+</html> 
